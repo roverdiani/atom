@@ -1,0 +1,58 @@
+Name     68glue ;
+PartNo   00 ;
+Date     21/03/2022 ;
+Revision 01 ;
+Designer Roverdi ;
+Company   ;
+Assembly None ;
+Location  ;
+Device   g22v10 ;
+
+/* INPUT PINS */
+PIN 1 = A19;
+PIN 2 = A18;
+PIN 3 = A17;
+PIN 4 = A16;
+PIN 5 = A15;
+PIN 6 = A14;
+PIN 7 = A13;
+PIN 8 = AS;
+PIN 9 = DS;
+PIN 10 = WR;
+PIN 11 = RE_ROM;
+
+/* OUTPUT PINS */
+PIN 23 = RAM1_CS;
+PIN 22 = RAM2_CS;
+PIN 21 = ROM_CS;
+PIN 20 = IO1_CS;
+PIN 19 = IO2_CS;
+PIN 18 = IO3_CS;
+PIN 17 = IO4_CS;
+PIN 15 = FT_RD;
+PIN 14 = FT_WR;
+
+/* LOCAL VARIABLES */
+FIELD Address = [A19..A00];
+
+/* LOGIC */
+RAM1 = Address:[00000..7FFFF];
+RAM2 = Address:[80000..DFFFF];
+IO1 = Address:[E0000..E1FFF];
+IO2 = Address:[E2000..E3FFF];
+IO3 = Address:[E4000..E5FFF];
+IO4 = Address:[E6000..E7FFF];
+IO5 = Address:[E8000..E9FFF];
+ROM = Address:[F0000..FFFFF];
+
+!RAM1_CS = RAM1 & RE_ROM & !AS & !DS;
+!RAM2_CS = RAM2 & RE_ROM & !AS & !DS;
+!ROM_CS = ROM # !RE_ROM & !AS & !DS;
+!IO1_CS = IO1 & RE_ROM & !AS & !DS;
+!IO2_CS = IO2 & RE_ROM & !AS & !DS;
+!IO3_CS = IO3 & RE_ROM & !AS & !DS;
+!IO4_CS = IO4 & RE_ROM & !AS & !DS;
+!FT_RD = IO5 & WR & !AS & !DS;
+!FT_WR = IO5 & !WR & !AS & !DS;
+
+

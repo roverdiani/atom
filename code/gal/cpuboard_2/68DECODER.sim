@@ -1,0 +1,119 @@
+%SIGNAL
+PIN   7 =  A13 
+PIN   6 =  A14 
+PIN   5 =  A15 
+PIN   4 =  A16 
+PIN   3 =  A17 
+PIN   2 =  A18 
+PIN   1 =  A19 
+PIN   8 =  AS 
+PIN   9 =  E 
+PIN  15 =  FT_RD 
+PIN  14 =  FT_WR 
+PIN  20 =  IO1_CS 
+PIN  19 =  IO2_CS 
+PIN  18 =  IO3_CS 
+PIN  17 =  IO4_CS 
+PIN  23 =  RAM1_CS 
+PIN  22 =  RAM2_CS 
+PIN  11 =  RE_ROM 
+PIN  21 =  ROM_CS 
+PIN  13 =  VMA 
+PIN  16 =  VPA_DECODE 
+PIN  10 =  WR 
+%END
+
+%FIELD
+FIELD Address = A19,A18,A17,A16,A15,A14,A13,A12,A11,A10,A9,A8,A7,A6,A5,A4,A3,A2,A1,A0
+%END
+
+%EQUATION
+!FT_RD =>
+    !A13 & !A14 & A15 & !A16 & A17 & A18 & A19 & E & !VMA & WR
+
+!FT_WR =>
+    !A13 & !A14 & A15 & !A16 & A17 & A18 & A19 & E & !VMA & !WR
+
+IO1 =>
+    !A13 & !A14 & !A15 & !A16 & A17 & A18 & A19
+
+!IO1_CS =>
+    !A13 & !A14 & !A15 & !A16 & A17 & A18 & A19 & E & RE_ROM & !VMA
+
+IO2 =>
+    A13 & !A14 & !A15 & !A16 & A17 & A18 & A19
+
+!IO2_CS =>
+    A13 & !A14 & !A15 & !A16 & A17 & A18 & A19 & E & RE_ROM & !VMA
+
+IO3 =>
+    !A13 & A14 & !A15 & !A16 & A17 & A18 & A19
+
+!IO3_CS =>
+    !A13 & A14 & !A15 & !A16 & A17 & A18 & A19 & E & RE_ROM & !VMA
+
+IO4 =>
+    A13 & A14 & !A15 & !A16 & A17 & A18 & A19
+
+!IO4_CS =>
+    A13 & A14 & !A15 & !A16 & A17 & A18 & A19 & E & RE_ROM & !VMA
+
+IO5 =>
+    !A13 & !A14 & A15 & !A16 & A17 & A18 & A19
+
+RAM1 =>
+    !A19
+
+!RAM1_CS =>
+    !A19 & !AS & RE_ROM
+
+RAM2 =>
+    !A18 & A19
+  # !A17 & A18 & A19
+
+!RAM2_CS =>
+    !A17 & A18 & A19 & !AS & RE_ROM
+  # !A18 & A19 & !AS & RE_ROM
+
+ROM =>
+    A16 & A17 & A18 & A19
+
+!ROM_CS =>
+    A16 & A17 & A18 & A19
+  # !AS & !RE_ROM
+
+VPA_DECODE =>
+    !A13 & !A14 & A15 & !A16 & A17 & A18 & A19 & !AS
+  # !A15 & !A16 & A17 & A18 & A19 & !AS
+
+FT_RD.oe  =>
+    1 
+
+FT_WR.oe  =>
+    1 
+
+IO1_CS.oe  =>
+    1 
+
+IO2_CS.oe  =>
+    1 
+
+IO3_CS.oe  =>
+    1 
+
+IO4_CS.oe  =>
+    1 
+
+RAM1_CS.oe  =>
+    1 
+
+RAM2_CS.oe  =>
+    1 
+
+ROM_CS.oe  =>
+    1 
+
+VPA_DECODE.oe  =>
+    1 
+
+%END
