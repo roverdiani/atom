@@ -1,0 +1,56 @@
+Name     ioglue ;
+PartNo   00 ;
+Date     21/03/2022 ;
+Revision 01 ;
+Designer Roverdi ;
+Company   ;
+Assembly None ;
+Location  ;
+Device   g22v10 ;
+
+/* INPUT PINS */
+PIN 2 = IO_CS;
+PIN 3 = A15;
+PIN 4 = A14;
+PIN 5 = A13;
+PIN 6 = FC0;
+PIN 7 = FC1;
+PIN 8 = FC2;
+PIN 10 = AS;
+PIN 11 = VMA;
+PIN 13 = VPAIN;
+
+/* OUTPUT PINS */
+PIN 23 = IO1_CS;
+PIN 22 = IO2_CS;
+PIN 21 = IO3_CS;
+PIN 20 = IO4_CS;
+PIN 16 = VPA_OUT;
+PIN 15 = VPA_DECODE;
+PIN 14 = DTACK;
+
+/* LOCAL VARIABLES */
+FIELD Address = [A15..A00];
+
+/* LOGIC */
+IO1 = Address:[0000..1FFF];
+IO2 = Address:[2000..3FFF];
+IO3 = Address:[4000..5FFF];
+IO4 = Address:[6000..7FFF];
+IO5 = Address:[8000..9FFF];
+IO6 = Address:[A000..BFFF];
+IO7 = Address:[C000..DFFF];
+IO8 = Address:[E000..FFFF];
+
+!IO1_CS = IO1 & !VMA & !IO_CS;
+!IO2_CS = IO2 & !VMA & !IO_CS;
+!IO3_CS = IO3 & !VMA & !IO_CS;
+!IO4_CS = IO4 & !VMA & !IO_CS;
+
+INT = !AS & FC0 & FC1 & FC2;
+
+!DTACK = IO_CS & VPAIN & !INT;
+!VPA_OUT = !VPAIN # INT;
+VPA_DECODE = !AS & (IO1 # IO2 # IO3 # IO4) & !IO_CS;
+
+

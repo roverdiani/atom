@@ -1,0 +1,39 @@
+Name     68glue ;
+PartNo   00 ;
+Date     21/03/2022 ;
+Revision 01 ;
+Designer Roverdi ;
+Company   ;
+Assembly None ;
+Location  ;
+Device   g22v10 ;
+
+/* INPUT PINS */
+PIN 2 = A19;
+PIN 3 = A18;
+PIN 4 = A17;
+PIN 5 = A16;
+PIN 10 = AS;
+PIN 11 = RE_ROM;
+
+/* OUTPUT PINS */
+PIN 23 = RAM1_CS;
+PIN 22 = RAM2_CS;
+PIN 21 = ROM_CS;
+PIN 14 = IO_CS;
+
+/* LOCAL VARIABLES */
+FIELD Address = [A19..A00];
+
+/* LOGIC */
+RAM1 = Address:[00000..7FFFF];
+RAM2 = Address:[80000..DFFFF];
+IO = Address:[E0000..EFFFF];
+ROM = Address:[F0000..FFFFF];
+
+!RAM1_CS = RAM1 & RE_ROM & !AS;
+!RAM2_CS = RAM2 & RE_ROM & !AS;
+!ROM_CS = ROM # !RE_ROM & !AS;
+!IO_CS = IO & RE_ROM & !AS;
+
+

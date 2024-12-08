@@ -1,0 +1,187 @@
+{COMPONENT C:\USERS\ROCVE\ONEDRIVE\ÁREA DE TRABALHO\NEW68K\IOBOARD\GAL.SYM
+
+ {ENVIRONMENT
+  {PDIFvrev 3.00}
+  {Program "CUPL(WM) Version 5.0a"}
+  {DBtype "Schematic"}
+  {DBvrev 1.01}
+  {DBtime "Tue May 17 00:25:28 2022 "}
+  {DBunit "MIL"}
+  {DBgrid 10}
+  {Lyrstr "WIRES" 1 "BUS" 1 "GATE" 2 "IEEE" 2 "PINFUN" 3 "PINNUM" 1 
+          "PINNAM" 6 "PINCON" 4 "REFDES" 2 "ATTR" 6 "SDOT" 1 
+          "DEVICE" 5 "OUTLIN" 5 "ATTR2" 6 "NOTES" 6 "NETNAM" 4 
+          "CMPNAM" 5 "BORDER" 5}
+ }
+
+ {USER
+  {VIEW
+   {Mode SYMB}
+   {Nlst OPEN}
+   {Vw 0 0 2}
+   {Lv 12 2 2 2 0 0 2 2 2 2 0 0 2 1 2 0 0 0 0}
+   {Gs 10 10}
+  }
+ }
+
+ {DISPLAY
+  [Ly "PINNUM"]
+  [Ls "SOLID"][Wd 0]
+  [Ts 15][Tj "LC"][Tr 0][Tm "N"]
+ }
+
+ {SYMBOL
+  {PIN_DEF
+   [Ly "PINCON"]
+   {P IO_CS {Pt "INPUT"}{Lq 0}{Ploc 100 200}}
+   {P A15 {Pt "INPUT"}{Lq 0}{Ploc 100 180}}
+   {P A14 {Pt "INPUT"}{Lq 0}{Ploc 100 160}}
+   {P A13 {Pt "INPUT"}{Lq 0}{Ploc 100 140}}
+   {P FC0 {Pt "INPUT"}{Lq 0}{Ploc 100 120}}
+   {P FC1 {Pt "INPUT"}{Lq 0}{Ploc 100 100}}
+   {P FC2 {Pt "INPUT"}{Lq 0}{Ploc 100 80}}
+   {P AS {Pt "INPUT"}{Lq 0}{Ploc 100 60}}
+   {P VMA {Pt "INPUT"}{Lq 0}{Ploc 100 40}}
+   {P VPAIN {Pt "INPUT"}{Lq 0}{Ploc 100 20}}
+   {P DTACK {Pt "I/O"}{Lq 0}{Ploc 330 20}}
+   {P VPA_DECO {Pt "I/O"}{Lq 0}{Ploc 330 40}}
+   {P VPA_OUT {Pt "I/O"}{Lq 0}{Ploc 330 60}}
+   {P IO4_CS {Pt "I/O"}{Lq 0}{Ploc 330 80}}
+   {P IO3_CS {Pt "I/O"}{Lq 0}{Ploc 330 100}}
+   {P IO2_CS {Pt "I/O"}{Lq 0}{Ploc 330 120}}
+   {P IO1_CS {Pt "I/O"}{Lq 0}{Ploc 330 140}}
+  }
+
+  {PKG
+   [Ly "REFDES"]
+   [Ts 25][Tj "CB"][Tr 0][Tm "N"]
+   {Rdl 215 230}
+
+   [Ly "PINNUM"]
+   [Ts 15][Tj "RC"]
+   {Pnl 120 210}
+   {Pnl 120 190}
+   {Pnl 120 170}
+   {Pnl 120 150}
+   {Pnl 120 130}
+   {Pnl 120 110}
+   {Pnl 120 90}
+   {Pnl 120 70}
+   {Pnl 120 50}
+   {Pnl 120 30}
+   [Ts 15][Tj "LC"]
+   {Pnl 310 30}
+   {Pnl 310 50}
+   {Pnl 310 70}
+   {Pnl 310 90}
+   {Pnl 310 110}
+   {Pnl 310 130}
+   {Pnl 310 150}
+
+   {Sd A 2 3 4 5 6 7 8 10 11 13 14 15 16 20 21 22 23}
+  }
+
+  {PIC
+   [Ly "GATE"]
+   [Ts 15][Tj "LC"][Tr 0][Tm "N"]
+   {R 130 220 300 0}
+   {L 130 200 100 200}
+   {L 130 180 100 180}
+   {L 130 160 100 160}
+   {L 130 140 100 140}
+   {L 130 120 100 120}
+   {L 130 100 100 100}
+   {L 130 80 100 80}
+   {L 130 60 100 60}
+   {L 130 40 100 40}
+   {L 130 20 100 20}
+   {L 300 20 330 20}
+   {L 300 40 330 40}
+   {L 300 60 330 60}
+   {L 300 80 330 80}
+   {L 300 100 330 100}
+   {L 300 120 330 120}
+   {L 300 140 330 140}
+   [Ly "PINNAM"]
+   [Tj "LC"]
+   {T "IO_CS" 140 200}
+   {T "A15" 140 180}
+   {T "A14" 140 160}
+   {T "A13" 140 140}
+   {T "FC0" 140 120}
+   {T "FC1" 140 100}
+   {T "FC2" 140 80}
+   {T "AS" 140 60}
+   {T "VMA" 140 40}
+   {T "VPAIN" 140 20}
+   [Tj "RC"]
+   {T "DTACK" 290 20}
+   {T "VPA_DECO" 290 40}
+   {T "VPA_OUT" 290 60}
+   {T "IO4_CS" 290 80}
+   {T "IO3_CS" 290 100}
+   {T "IO2_CS" 290 120}
+   {T "IO1_CS" 290 140}
+   [Ly "DEVICE"]
+   [Tj "CT"]
+   {T "G22V10" 215 -10}
+  }
+
+  {ATR
+   {IN
+    {Org 100 20}
+    {Ty 255}
+   }
+   {EX
+    [Ly "ATTR2"]
+    [Ts 12][Tj "CT"][Tr 0][Tm "N"]
+    {At PLD C:\USERS\ROCVE\ONEDRIVE\ÁREA DE TRABALHO\NEW68K\IOBOARD\GAL 215 220}
+   }
+  }
+ }
+
+ {DETAIL
+  {ANNOTATE
+  }
+
+  {NET_DEF
+   {N IO_CS
+   }
+   {N A15
+   }
+   {N A14
+   }
+   {N A13
+   }
+   {N FC0
+   }
+   {N FC1
+   }
+   {N FC2
+   }
+   {N AS
+   }
+   {N VMA
+   }
+   {N VPAIN
+   }
+   {N DTACK
+   }
+   {N VPA_DECO
+   }
+   {N VPA_OUT
+   }
+   {N IO4_CS
+   }
+   {N IO3_CS
+   }
+   {N IO2_CS
+   }
+   {N IO1_CS
+   }
+  }
+
+  {SUBCOMP
+  }
+ }
+}

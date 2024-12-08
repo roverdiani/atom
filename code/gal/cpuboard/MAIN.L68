@@ -1,0 +1,43 @@
+000F0008 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 16/05/2022 18:05:23
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : 68k Monitor
+00000000                             3  * Written by : rocv
+00000000                             4  * Date       : 19/04/2022
+00000000                             5  * Description: A simple monitor
+00000000                             6  *-----------------------------------------------------------
+000F0000                             7      ORG    $F0000
+000F0000                             8      
+000F0000  =000E0000                  9  FT245   EQU $000E0000
+000F0000  =00010000                 10  STACK_B EQU $00010000
+000F0000                            11  
+000F0000= 00010000                  12      dc.l    STACK_B
+000F0004= 000F0008                  13      dc.l    START
+000F0008                            14  
+000F0008                            15  START:
+000F0008  103C 0048                 16      MOVE.B  #$48, D0
+000F000C  13C0 000E0000             17      MOVE.B  D0, FT245
+000F0012                            18  
+000F0012                            19  LOOP:
+000F0012  4E71                      20      nop
+000F0014  4EF9 000F0012             21      jmp     LOOP
+000F001A                            22  
+000F001A  FFFF FFFF                 23      SIMHALT
+000F001E                            24  
+000F001E                            25  * Put variables and constants here
+000F001E                            26  
+000F001E                            27      END    START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+FT245               E0000
+LOOP                F0012
+STACK_B             10000
+START               F0008

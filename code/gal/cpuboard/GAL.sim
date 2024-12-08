@@ -1,0 +1,58 @@
+%SIGNAL
+PIN   5 =  A16 
+PIN   4 =  A17 
+PIN   3 =  A18 
+PIN   2 =  A19 
+PIN  10 =  AS 
+PIN  14 =  IO_CS 
+PIN  23 =  RAM1_CS 
+PIN  22 =  RAM2_CS 
+PIN  11 =  RE_ROM 
+PIN  21 =  ROM_CS 
+%END
+
+%FIELD
+FIELD Address = A19,A18,A17,A16,A15,A14,A13,A12,A11,A10,A9,A8,A7,A6,A5,A4,A3,A2,A1,A0
+%END
+
+%EQUATION
+IO =>
+    !A16 & A17 & A18 & A19
+
+!IO_CS =>
+    !A16 & A17 & A18 & A19 & !AS & RE_ROM
+
+RAM1 =>
+    !A19
+
+!RAM1_CS =>
+    !A19 & !AS & RE_ROM
+
+RAM2 =>
+    !A18 & A19
+  # !A17 & A18 & A19
+
+!RAM2_CS =>
+    !A17 & A18 & A19 & !AS & RE_ROM
+  # !A18 & A19 & !AS & RE_ROM
+
+ROM =>
+    A16 & A17 & A18 & A19
+
+!ROM_CS =>
+    A16 & A17 & A18 & A19
+  # !AS & !RE_ROM
+
+IO_CS.oe  =>
+    1 
+
+RAM1_CS.oe  =>
+    1 
+
+RAM2_CS.oe  =>
+    1 
+
+ROM_CS.oe  =>
+    1 
+
+%END
