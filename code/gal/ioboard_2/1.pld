@@ -1,0 +1,59 @@
+Name     ioglue ;
+PartNo   00 ;
+Date     21/03/2022 ;
+Revision 01 ;
+Designer Roverdi ;
+Company   ;
+Assembly None ;
+Location  ;
+Device   g22v10 ;
+
+/* INPUT PINS */
+PIN 1 = clock;
+PIN 2 = ffclear;
+PIN 3 = ffpre;
+PIN 4 = fsel1;
+PIN 5 = fsel2;
+PIN 6 = timerin1;
+PIN 7 = timerin2;
+
+/* OUTPUT PINS */
+PIN 14 = ff1;
+PIN 15 = ff2;
+PIN 16 = ff3;
+PIN 17 = ff4;
+PIN 18 = ff5;
+PIN 19 = ff6;
+PIN 21 = timerintff;
+PIN 22 = clockdiv1;
+PIN 23 = clockdiv2;
+
+/* LOCAL VARIABLES */
+
+/* LOGIC */
+
+ff1.D = !ff6;
+ff2.D = ff1;
+ff3.D = ff2;
+ff4.D = ff3;
+ff5.D = ff4;
+ff6.D = ff5;
+
+clockdiv1 = (fsel1 & clock # !fsel1 & ff6);
+clockdiv2 = (fsel2 & clock # !fsel2 & ff6);
+
+timerintff.J = timerin1;
+timerintff.K = timerin2;
+
+ff1.ar = ffclear;
+ff2.ar = ffclear;
+ff3.ar = ffclear;
+ff4.ar = ffclear;
+ff5.ar = ffclear;
+ff6.ar = ffclear;
+ff1.sp = ffpre;
+ff2.sp = ffpre;
+ff3.sp = ffpre;
+ff4.sp = ffpre;
+ff5.sp = ffpre;
+ff6.sp = ffpre;
