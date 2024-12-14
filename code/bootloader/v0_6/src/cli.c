@@ -7,9 +7,10 @@
 #include "dump.h"
 #include "terminal.h"
 #include "monitor.h"
+#include "xmodem.h"
 
 static const char help_msg[] = {
-    "ATOM68k Command Line Interface v0.1\n"
+    "ATOM68k Command Line Interface v0.1\n\n"
     "Available commands:\n"
 };
 
@@ -17,7 +18,8 @@ const CLI_Func_t cli_functions[] = {
     {"cls", cli_cls, "clears the terminal"},
     {"dump", dump_main, "dumps portion of the memory to the terminal"},
     {"help", cli_help, "prints this help message"},
-    {"monitor", monitor_main, "starts the monitor program"},
+    {"monitor", cli_monitor, "starts the monitor program"},
+    {"run", cli_xmodem_run, "runs a program transferred via XMODEM"},
     {"xmodem", cli_xmodem, "starts XMODEM data transfer program"},
     {NULL, NULL, NULL},
 };
@@ -34,11 +36,23 @@ void cli_help(uint8_t argc, const char *buf, const uint16_t *argv_index)
     for (const CLI_Func_t *ptr = cli_functions; ptr->function_name != NULL; ptr++) {
         cli_utils_print(" * %s\t\t- %s\n", ptr->function_name, ptr->function_description);
     }
+
+    printf("\n");
+}
+
+void cli_monitor(uint8_t argc, const char *buf, const uint16_t *argv_index)
+{
+    monitor_main();
 }
 
 void cli_xmodem(uint8_t argc, const char *buf, const uint16_t *argv_index)
 {
-    printf("XMODEM program not implemented yet.\n\n");
+    xmodem_main();
+}
+
+void cli_xmodem_run(uint8_t argc, const char *buf, const uint16_t *argv_index)
+{
+    xmodem_run();
 }
 
 int cli_utils_print(const char *fmt, ...)

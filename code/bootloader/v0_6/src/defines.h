@@ -6,7 +6,7 @@
 #define MEM_SIZE 0xFFFFF // 68008 has 1 megabyte capacity
 
 #define INT_TABLE_ADDR  0x00000060
-#define XMODEM_PRG_ADDR 0x00080000
+#define XMODEM_PRG_ADDR 0x00060000
 
 #define PPI_ADDR    0x000E0000
 #define FTDI_ADDR   0x000E1000

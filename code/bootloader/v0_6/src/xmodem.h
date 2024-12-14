@@ -19,6 +19,9 @@
 #define XMODEM_TRANSFER_INVALID_SOH_ERR 2
 #define XMODEM_TRANSFER_TIMEOUT_ERR     3
 
+void xmodem_main();
+void xmodem_run();
+
 int xmodem_transfer_init(struct ftdi *ftdi, int timeoutSeconds);
 int xmodem_transfer_read_packet(struct ftdi *ftdi);
 

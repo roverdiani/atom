@@ -4,6 +4,7 @@
         "delay.h": "c",
         "stdstreams.h": "c",
         "ftdi.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "defines.h": "c"
     }
 }

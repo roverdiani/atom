@@ -3,12 +3,73 @@
 //
 
 #include "xmodem.h"
+#include <stdbool.h>
 #include "defines.h"
 #include "string.h"
 #include "delay.h"
+#include "interrupt.h"
+
+extern struct ftdi _ftdi;
 
 uintptr_t currentAddress = XMODEM_PRG_ADDR;
 static int packetNumber = 0;
+bool transferOk = false;
+
+void xmodem_main()
+{
+    printf("XMODEM v0.1\n");
+    printf("Memory program destination address is 0x%08X.\n", XMODEM_PRG_ADDR);
+    printf("Press X to start the transfer or any other key to exit.\n");
+
+    char c = getchar();
+    if (c != 'X' && c != 'x') {
+        printf("Transfer canceled.\n\n");
+        return;
+    }
+
+    printf("Entering transfer mode and waiting for transfer to start.\n");
+
+    int result = xmodem_transfer_init(&_ftdi, 30);
+    switch (result) {
+        case XMODEM_TRANSFER_NO_ERR:
+            printf("Transfer complete!");
+            break;
+        case XMODEM_TRANSFER_INVALID_SOH_ERR:
+            printf("Transfer error: invalid first packet.");
+            break;
+        case XMODEM_TRANSFER_TIMEOUT_ERR:
+            printf("Transfer error: timed out.");
+            break;
+        default:
+            printf("Transfer error: unknown.");
+            break;
+    }
+
+    transferOk = result == XMODEM_TRANSFER_NO_ERR;
+
+    printf("\n\n");
+}
+
+void xmodem_run()
+{
+    if (!transferOk) {
+        printf("Error: there is no program ready to be ran.\n\n");
+        return;
+    }
+
+    // Toggle the timer interrupt flip-flop, disabling it
+    enable_timer_int();
+
+    // Disable interrupts
+    asm volatile ("move.w   #0x2700, %sr");
+
+    void *ptr = (void *)XMODEM_PRG_ADDR;
+
+    printf("Jumping to program loaded at 0x%08X.\n", XMODEM_PRG_ADDR);
+
+    // Jump to the loaded program's memory address
+    goto *ptr;
+}
 
 int xmodem_transfer_init(struct ftdi *ftdi, int timeoutSeconds)
 {

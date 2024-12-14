@@ -36,16 +36,21 @@ void dump_print_usage()
 
 void dump_dump_memory(uint32_t address, uint32_t length)
 {
-    printf("Dumping 0x%X bytes of memory, starting at address 0x%04X.\n\n", length, address);
+    printf("Dumping 0x%X bytes of memory, starting at address 0x%X.\n\n", length, address);
 
     uint32_t limitAddress = address + length;
+    if (limitAddress > MEM_SIZE) {
+        limitAddress = MEM_SIZE;
+    }
+
     uint32_t currentAddress = address;
 
-    printf("         00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F\n");
+    printf("            00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F\n");
 
     do {
-        printf("%08X", currentAddress);
+        printf("   %08X", currentAddress);
 
+        // "Hex View"
         for (int i = 0; i < 16; i++) {
             if ((currentAddress + i) > limitAddress) {
                 printf("   ");
@@ -56,8 +61,9 @@ void dump_dump_memory(uint32_t address, uint32_t length)
             printf(" %02X", value);
         }
 
-        printf(" ");
+        printf("  ");
 
+        // "ASCII View"
         for (int i = 0; i < 16; i++) {
             if ((currentAddress + i) > limitAddress) {
                 printf(" ");
@@ -65,6 +71,7 @@ void dump_dump_memory(uint32_t address, uint32_t length)
             }
 
             char value = *((volatile char*)currentAddress + i);
+            // Checks if the value is printable
             if (value > 32 && value <= 126) {
                 printf("%c", value);
             } else {
@@ -74,7 +81,7 @@ void dump_dump_memory(uint32_t address, uint32_t length)
 
         currentAddress += 16;
         printf("\n");
-    } while (currentAddress < address + length);
+    } while (currentAddress < limitAddress);
 
     printf("\n-- END MEMORY DUMP --\n\n");
 }
