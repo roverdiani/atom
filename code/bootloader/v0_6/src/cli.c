@@ -1,0 +1,134 @@
+#include "cli.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+#include "dump.h"
+#include "terminal.h"
+#include "monitor.h"
+
+static const char help_msg[] = {
+    "ATOM68k Command Line Interface v0.1\n"
+    "Available commands:\n"
+};
+
+const CLI_Func_t cli_functions[] = {
+    {"cls", cli_cls, "clears the terminal"},
+    {"dump", dump_main, "dumps portion of the memory to the terminal"},
+    {"help", cli_help, "prints this help message"},
+    {"monitor", monitor_main, "starts the monitor program"},
+    {"xmodem", cli_xmodem, "starts XMODEM data transfer program"},
+    {NULL, NULL, NULL},
+};
+
+void cli_cls(uint8_t argc, const char *buf, const uint16_t *argv_index)
+{
+    terminal_clear();
+}
+
+void cli_help(uint8_t argc, const char *buf, const uint16_t *argv_index)
+{
+    cli_utils_print(help_msg);
+
+    for (const CLI_Func_t *ptr = cli_functions; ptr->function_name != NULL; ptr++) {
+        cli_utils_print(" * %s\t\t- %s\n", ptr->function_name, ptr->function_description);
+    }
+}
+
+void cli_xmodem(uint8_t argc, const char *buf, const uint16_t *argv_index)
+{
+    printf("XMODEM program not implemented yet.\n\n");
+}
+
+int cli_utils_print(const char *fmt, ...)
+{
+    va_list args;
+
+    va_start(args, fmt);
+    int n = vfprintf(stdout, fmt, args);
+    va_end(args);
+
+    return n;
+}
+
+static void command_parser(const char* line, size_t size, uint16_t *command, size_t *command_length);
+static inline bool is_cmd_end(const char ch);
+static inline bool cmp_command_names(const char *line, const uint16_t *const index, const char *command);
+
+uint8_t cli_interpreter(const char *line, size_t size, uint16_t *command, size_t *command_length)
+{
+    if (line == NULL || size == 0 || command == NULL || command_length == NULL) {
+        return BAD_REQUEST;
+    }
+
+    command_parser(line, size, command, command_length);
+
+    if (*command_length > 0) {
+        const CLI_Func_t *ptr = cli_functions;
+        while (ptr->cli_handler != NULL) {
+            if (cmp_command_names(line, command, ptr->function_name)) {
+                ptr->cli_handler(*command_length, line, command);
+                break;
+            }
+            ptr++;
+        }
+
+        if (ptr->cli_handler == NULL) {
+            cli_utils_print("Command not supported\n");
+        }
+    }
+
+    return COMMAND_PARSED;
+}
+
+static void command_parser(const char *line, size_t size, uint16_t *command, size_t *command_length)
+{
+    uint16_t pos = 0;
+    while (pos < size && isspace(line[pos])) {
+        pos++;
+    }
+
+    bool is_first_ch = true;
+    while (pos != size && !is_cmd_end(line[pos])) {
+        if (is_first_ch) {
+            (*command_length)++;
+            *command++ = pos;
+            is_first_ch = false;
+        }
+
+        if (line[pos] == ' ') {
+            *command++ = pos;
+            is_first_ch = true;
+            while (pos < size && line[pos] == ' ') {
+                pos++;
+            }
+        } else {
+            pos++;
+        }
+    }
+    *command++ = pos;
+}
+
+static inline bool is_cmd_end(const char ch)
+{
+    if (ch == '\n' || ch == '\0') {
+        return true;
+    }
+
+    return false;
+}
+
+static inline bool cmp_command_names(const char *line, const uint16_t *const index, const char *command) {
+    const char *command_line_start = line + *index;
+    const char *command_line_end = line + *(index + 1);
+
+    while (command_line_start != command_line_end && *command && *command_line_start++ == *command++) {
+    }
+
+    if (command_line_start == command_line_end && *command == '\0') {
+        return true;
+    }
+
+    return false;
+}
