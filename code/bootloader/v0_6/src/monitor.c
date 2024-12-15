@@ -51,6 +51,7 @@ void monitor_main()
         monitor_parse_input(buf, count);
     }
 
+    shouldQuit = false;
     printf("\n");
 }
 
@@ -74,6 +75,8 @@ void monitor_parse_input(const char *buf, int count)
             printf("Quitting.\n");
             shouldQuit = true;
             break;
+        case '\0':
+            break;
         default:
             printf("Unknown command or wrong syntax. Press H for help.\n");
             break;
@@ -84,11 +87,11 @@ void monitor_print_help()
 {
     printf( "Atom68k Monitor\n\n"
             "Available commands:\n"
-            "* h\t\t\t- prints this help message\n"
-            "* r XXXX\t\t- read byte at XXXX address\n"
+            "* h\t\t- prints this help message\n"
+            "* r XXXX\t- read byte at XXXX address\n"
             "* r XXXX YY\t- read YY bytes at XXXX address\n"
             "* w XXXX YY\t- write byte YY at XXXX address\n"
-            "* q\t\t\t- quit the monitor\n"
+            "* q\t\t- quit the monitor\n"
     );
 }
 
