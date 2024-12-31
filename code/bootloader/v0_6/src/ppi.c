@@ -9,9 +9,14 @@ void ppi_init(struct ppi *self, uintptr_t address)
 {
     self->address = address;
 
-    // Ports A, B and Upper C are output. Lower C input.
+    // Ports A, B and C (Upper and Lower) as input.
     // Mode 0 for all three.
-    PORT_IO(PPI_CTRL_PORT_ADDR) = 0x81;
+    PORT_IO(PPI_CTRL_PORT_ADDR) = 0x9B;
+}
+
+void ppi_set_control_register(struct ppi *self, char value)
+{
+    PORT_IO(PPI_CTRL_PORT_ADDR) = value;
 }
 
 void ppi_write_port_a(struct ppi *self, char value)

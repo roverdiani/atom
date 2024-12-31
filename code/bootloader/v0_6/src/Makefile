@@ -5,7 +5,7 @@ OBJCOPY = m68k-elf-objcopy
 
 BUILD_DIR = build
 BIN = $(BUILD_DIR)/main.bin
-OBJS = $(patsubst %.o, $(BUILD_DIR)/%.o, startup.o main.o interrupt.o ftdi.o ppi.o delay.o stdstreams.o xmodem.o cli.o terminal.o monitor.o dump.o)
+OBJS = $(patsubst %.o, $(BUILD_DIR)/%.o, startup.o main.o interrupt.o ftdi.o ppi.o delay.o stdstreams.o xmodem.o cli.o terminal.o monitor.o dump.o pata.o)
 
 all: $(BUILD_DIR) $(BIN)
 

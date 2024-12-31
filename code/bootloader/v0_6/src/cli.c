@@ -8,6 +8,7 @@
 #include "terminal.h"
 #include "monitor.h"
 #include "xmodem.h"
+#include "pata.h"
 
 static const char help_msg[] = {
     "ATOM68k Command Line Interface v0.1\n\n"
@@ -19,6 +20,7 @@ const CLI_Func_t cli_functions[] = {
     {"dump", dump_main, "dumps portion of the memory to the terminal"},
     {"help", cli_help, "prints this help message"},
     {"monitor", cli_monitor, "starts the monitor program"},
+    {"pata", pata_main, "pata program"},
     {"run", cli_xmodem_run, "runs a program transferred via XMODEM"},
     {"xmodem", cli_xmodem, "starts XMODEM data transfer program"},
     {NULL, NULL, NULL},

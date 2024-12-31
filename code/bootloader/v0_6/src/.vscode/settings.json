@@ -5,6 +5,9 @@
         "stdstreams.h": "c",
         "ftdi.h": "c",
         "stdbool.h": "c",
-        "defines.h": "c"
-    }
+        "defines.h": "c",
+        "vectors.h": "c",
+        "dump.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

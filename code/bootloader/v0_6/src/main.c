@@ -22,6 +22,9 @@ int main()
 
     // Init the 8255 and the FT245
     ppi_init(&_ppi, PPI_ADDR);
+    // Ports A, B and Upper C are output. Lower C input.
+    // Mode 0 for all three.
+    ppi_set_control_register(&_ppi, 0x81);
     ftdi_init(&_ftdi, &_ppi, FTDI_ADDR);
 
     terminal_clear();
