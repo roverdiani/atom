@@ -4,18 +4,18 @@
 
 #include "delay.h"
 
-volatile unsigned int ticks = 0;
+volatile uint32_t ticks = 0;
 
-void delay(int ms)
+void delay(uint32_t ms)
 {
-    unsigned int targetTick = ticks + ms;
-    unsigned int currentTick;
+    uint32_t targetTick = ticks + ms;
+    uint32_t currentTick;
     do {
         currentTick = ticks;
     } while (currentTick < targetTick);
 }
 
-unsigned int millis()
+uint32_t millis()
 {
     return ticks;
 }

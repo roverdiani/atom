@@ -24,9 +24,7 @@ size_t stdout_write(FILE* instance, const char* bp, size_t n)
 size_t stdin_read(FILE* instance, char* bp, size_t n)
 {
     for (size_t i = 0; i < n; i++)
-    {
         bp[i] = ftdi_read_char(&_ftdi);
-    }
 
     return n;
 }

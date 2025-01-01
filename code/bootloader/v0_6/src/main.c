@@ -47,15 +47,16 @@ int main()
         do {
             char c = getchar();
 
-            if (c == CARRIAGE_RETURN) {
+            if (c == CARRIAGE_RETURN)
+            {
                 buf[count] = '\0';
                 break;
             }
 
-            if (c == BACKSPACE) {
-                if (count <= 0) {
+            if (c == BACKSPACE)
+            {
+                if (count <= 0)
                     continue;
-                }
 
                 printf("%c %c", c, c);
                 count--;

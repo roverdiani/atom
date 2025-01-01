@@ -15,7 +15,8 @@ void dump_main(uint8_t argc, const char *buf, const uint16_t *argv_index)
     uint32_t length;
 
     int result = sscanf(buf, "%s %x %x", command, &address, &length);
-    if (result != 3 || address < 0 || address > MEM_SIZE || length < 0 || length > 0xFFFF) {
+    if (result != 3 || address < 0 || address > MEM_SIZE || length < 0 || length > 0xFFFF)
+    {
         printf("Error: Invalid arguments.\n");
         dump_print_usage();
         return;
@@ -39,9 +40,8 @@ void dump_dump_memory(uint32_t address, uint32_t length)
     printf("Dumping 0x%X bytes of memory, starting at address 0x%X.\n\n", length, address);
 
     uint32_t limitAddress = address + length;
-    if (limitAddress > MEM_SIZE) {
+    if (limitAddress > MEM_SIZE)
         limitAddress = MEM_SIZE;
-    }
 
     uint32_t currentAddress = address;
 
@@ -51,8 +51,10 @@ void dump_dump_memory(uint32_t address, uint32_t length)
         printf("   %08X", currentAddress);
 
         // "Hex View"
-        for (int i = 0; i < 16; i++) {
-            if ((currentAddress + i) > limitAddress) {
+        for (int i = 0; i < 16; i++)
+        {
+            if ((currentAddress + i) > limitAddress)
+            {
                 printf("   ");
                 continue;
             }
@@ -64,19 +66,20 @@ void dump_dump_memory(uint32_t address, uint32_t length)
         printf("  ");
 
         // "ASCII View"
-        for (int i = 0; i < 16; i++) {
-            if ((currentAddress + i) > limitAddress) {
+        for (int i = 0; i < 16; i++)
+        {
+            if ((currentAddress + i) > limitAddress)
+            {
                 printf(" ");
                 continue;
             }
 
             char value = *((volatile char*)currentAddress + i);
             // Checks if the value is printable
-            if (value > 32 && value <= 126) {
+            if (value > 32 && value <= 126)
                 printf("%c", value);
-            } else {
+            else
                 printf(".");
-            }
         }
 
         currentAddress += 16;

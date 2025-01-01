@@ -22,7 +22,8 @@ void xmodem_main()
     printf("Press X to start the transfer or any other key to exit.\n");
 
     char c = getchar();
-    if (c != 'X' && c != 'x') {
+    if (c != 'X' && c != 'x')
+    {
         printf("Transfer canceled.\n\n");
         return;
     }
@@ -30,7 +31,8 @@ void xmodem_main()
     printf("Entering transfer mode and waiting for transfer to start.\n");
 
     int result = xmodem_transfer_init(&_ftdi, 30);
-    switch (result) {
+    switch (result)
+    {
         case XMODEM_TRANSFER_NO_ERR:
             printf("Transfer complete!");
             break;
@@ -52,7 +54,8 @@ void xmodem_main()
 
 void xmodem_run()
 {
-    if (!transferOk) {
+    if (!transferOk)
+    {
         printf("Error: there is no program ready to be ran.\n\n");
         return;
     }
