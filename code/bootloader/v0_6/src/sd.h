@@ -2,54 +2,62 @@
 #define INC_68K_SRC_SD_H
 
 #include <stdint.h>
+#include "ppi.h"
 #include "spi.h"
 
 enum SD_CARD_COMMANDS {
-    SD_CMD0     = 0x00,
-    SD_CMD8     = 0x08,
-    SD_CMD9     = 0x09,
-    SD_CMD10    = 0x0A,
-    SD_CMD55    = 0x37,
-    SD_CMD58    = 0x3A,
-    SD_ACMD41   = 0x29,
+  SD_CMD0     = 0x00,
+  SD_CMD8     = 0x08,
+  SD_CMD9     = 0x09,
+  SD_CMD10    = 0x0A,
+  SD_CMD55    = 0x37,
+  SD_CMD58    = 0x3A,
+  SD_ACMD41   = 0x29,
 };
 
-// enum SD_CARD_ERRORS {};
+enum SD_CARD_ERRORS {
+  SD_ERROR_NO_CARD,
+};
 
 enum SD_CARD_TYPES {
-    SD_TYPE_SD1     = 1,
-    SD_TYPE_SD2     = 2,
-    SD_TYPE_SDHC    = 3,
+  SD_TYPE_SD1     = 1,
+  SD_TYPE_SD2     = 2,
+  SD_TYPE_SDHC    = 3,
 };
 
 enum SD_CARD_STATES {
-    SD_STATE_READY              = 0x00,
-    SD_STATE_IDLE               = 0x01,
-    SD_STATE_ILLEGAL_COMMAND    = 0x04,
-    SD_DATA_START_BLOCK         = 0xFE,
+  SD_STATE_READY              = 0x00,
+  SD_STATE_IDLE               = 0x01,
+  SD_STATE_ILLEGAL_COMMAND    = 0x04,
+  SD_DATA_START_BLOCK         = 0xFE,
 };
 
 enum SD_CARD_TIMEOUTS {
-    SD_TIMEOUT_INIT     = 5000,
-    SD_ERASE_TIMEOUT    = 15000,
-    SD_READ_TIMEOUT     = 300,
-    SD_WRITE_TIMEOUT    = 600,
+  SD_TIMEOUT_INIT     = 5000,
+  SD_ERASE_TIMEOUT    = 15000,
+  SD_READ_TIMEOUT     = 300,
+  SD_WRITE_TIMEOUT    = 600,
 };
 
-typedef struct CID {
-    uint8_t manufacturer_id;
-    char oem_application_id[2];
-    char product_name[5];
-    unsigned product_revision_n : 4;
-    unsigned product_revision_m: 4;
-    uint32_t product_serial_number;
-    unsigned reserved : 4;
-    unsigned manufacturing_date_year_high : 4;
-    unsigned manufacturing_date_year_low : 4;
-    unsigned manufacturing_date_month : 4;
-    unsigned crc_cheksum : 7;
-    unsigned not_used : 1;
-} sd_cid_t;
+struct SD_CID {
+  uint8_t manufacturer_id;
+  char oem_application_id[2];
+
+  char product_name[5];
+  unsigned product_revision_n : 4;
+  unsigned product_revision_m: 4;
+  uint32_t product_serial_number;
+
+  unsigned reserved : 4;
+  unsigned manufacturing_date_year_high : 4;
+  unsigned manufacturing_date_year_low : 4;
+  unsigned manufacturing_date_month : 4;
+
+  unsigned crc_cheksum : 7;
+  unsigned not_used : 1;
+} __attribute__((packed));
+
+typedef struct SD_CID sd_cid_t;
 
 typedef struct CSDV1 {
   // byte 0
@@ -172,8 +180,11 @@ union sd_csd_t {
   sd_csd2_t v2;
 };
 
+void sd_cli_handler(uint8_t argc, const char *buf, const uint16_t *argv_index);
+void sd_cli_print_usage();
+
 bool sd_card_init();
-bool sd_card_info();
+void sd_card_info();
 
 uint8_t sd_card_command(uint8_t command, uint32_t arg);
 uint8_t sd_card_a_command(uint8_t command, uint32_t arg);

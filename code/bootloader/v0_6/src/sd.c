@@ -1,13 +1,53 @@
 #include "sd.h"
 #include "delay.h"
 #include <stdio.h>
+#include <string.h>
 #include "dump.h"
 
 uint8_t status_;
 uint8_t type_;
 
+void sd_cli_handler(uint8_t argc, const char *buf, const uint16_t *argv_index)
+{
+    if (argc <= 1 || argc > 2) {
+        sd_cli_print_usage();
+        return;
+    }
+
+    char command[5];
+    char argument[10];
+
+    int result = sscanf(buf, "%s %s", command, argument);
+    if (result != 2)
+    {
+        printf("Error: Invalid arguments.\n");
+        sd_cli_print_usage();
+        return;
+    }
+
+    if (strcmp(argument, "info") == 0)
+        sd_card_info();
+    else
+    {
+        printf("Error: Invalid arguments.\n");
+        sd_cli_print_usage();
+    }
+}
+
+void sd_cli_print_usage()
+{
+    printf("Usage: \n"
+        "\tsd XXXX \n\n"
+        "\tWhere:\n"
+        "\t* XXXX: argument\n"
+        "\t\t- info: prints the sd card info\n"
+    );
+}
+
 bool sd_card_init()
 {
+    printf("Initializing the SD card... ");
+
     spi_set_cs_pin(true);
     for (uint8_t i = 0; i < 10; i++)
         spi_send_data_no_return(0xFF);
@@ -22,7 +62,7 @@ bool sd_card_init()
         unsigned int d = millis() - startTime;
         if (d > SD_TIMEOUT_INIT)
         {
-            printf("Fail: 1\n");
+            printf("fail! SD init timeout.\n");
             return false;
         }
     }
@@ -37,7 +77,7 @@ bool sd_card_init()
         
         if (status_ != 0xAA)
         {
-            printf("Fail: 2\n");
+            printf("fail! SD error CMD8.\n");
             return false;
         }
         
@@ -52,7 +92,7 @@ bool sd_card_init()
         unsigned int d = millis() - startTime;
         if (d > SD_TIMEOUT_INIT)
         {
-            printf("Fail: 3\n");
+            printf("fail! SDHC init timeout.\n");
             return false;
         }
     }
@@ -62,7 +102,7 @@ bool sd_card_init()
     {
         if (sd_card_command(SD_CMD58, 0))
         {
-            printf("Fail: 4\n");
+            printf("fai! SD error CMD58.\n");
             return false;
         }
         
@@ -76,18 +116,35 @@ bool sd_card_init()
 
     spi_set_cs_pin(true);
 
+    sd_cid_t cid;
+    if (!sd_read_cid(&cid))
+    {
+        printf("fail! Couldn't read the SD CID.\n");
+        return false;
+    }
+
+    printf("ok.\n%c%c ", cid.oem_application_id[0], cid.oem_application_id[1]);
+    for (int i = 0; i < 5; i++)
+        printf("%c", cid.product_name[i]);
+    printf(" %u.%u 0x%04X\n\n", cid.product_revision_n, cid.product_revision_m, cid.product_serial_number);
+
     return true;
 }
 
-bool sd_card_info()
+void sd_card_info()
 {
+    printf("Reading SD card info... ");
+
     sd_cid_t cid;
     if (!sd_read_cid(&cid))
-        return false;
-    
-    printf("SD Card Info:\n");
+    {
+        printf("fail!\nCouldn't read the SD Card CID.\n");
+        return;
+    }
 
-    printf("SD Card Type: ");
+    printf("ok.\nSD Card Info:\n");
+
+    printf("Card Type: ");
     if (type_ == SD_TYPE_SD1)
         printf("SD1\n");
     else if (type_ == SD_TYPE_SD2)
@@ -95,8 +152,8 @@ bool sd_card_info()
     else
         printf("SDHC\n");
 
-    printf("MID: %02X\n", cid.manufacturer_id);
-    printf("OID: %02X%02X\n", cid.oem_application_id[0], cid.oem_application_id[1]);
+    printf("Manufacturer ID: 0x%X\n", cid.manufacturer_id);
+    printf("OEM/Application ID: %c%c\n", cid.oem_application_id[0], cid.oem_application_id[1]);
 
     printf("Product Name: ");
     for (int i = 0; i < 5; i++)
@@ -104,10 +161,8 @@ bool sd_card_info()
     printf("\n");
 
     printf("Product revision: %u.%u\n", cid.product_revision_n, cid.product_revision_m);
-    printf("Serial number: %u\n", cid.product_serial_number);
-    printf("Manufacturing Date: %u/%u\n", cid.manufacturing_date_month, (((cid.manufacturing_date_year_high << 4) | cid.manufacturing_date_year_low)) + 2000);
-
-    return true;
+    printf("Serial number: 0x%04X\n", cid.product_serial_number);
+    printf("Manufacturing Date: %u/%u\n", cid.manufacturing_date_month, 2000 + ((cid.manufacturing_date_year_high << 4) | cid.manufacturing_date_year_low));
 }
 
 uint8_t sd_card_command(uint8_t command, uint32_t arg)

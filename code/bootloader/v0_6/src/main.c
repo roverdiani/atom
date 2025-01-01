@@ -38,12 +38,8 @@ int main()
 
     printf("ATOM68k\n");
     printf("BIOS v0.6 (12/2024)\n\n");
-    
-    printf("Initializing the SD card... ");
-    if (!sd_card_init())
-        printf("failed!.\n");
-    else
-        printf("ok.\n");
+
+    sd_card_init();
 
     while (true)
     {
