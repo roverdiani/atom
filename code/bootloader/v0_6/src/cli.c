@@ -8,7 +8,8 @@
 #include "terminal.h"
 #include "monitor.h"
 #include "xmodem.h"
-#include "pata.h"
+#include "spi.h"
+#include "sd.h"
 
 static const char help_msg[] = {
     "ATOM68k Command Line Interface v0.1\n\n"
@@ -20,8 +21,9 @@ const CLI_Func_t cli_functions[] = {
     {"dump", dump_main, "dumps portion of the memory to the terminal"},
     {"help", cli_help, "prints this help message"},
     {"monitor", cli_monitor, "starts the monitor program"},
-    {"pata", pata_main, "pata program"},
     {"run", cli_xmodem_run, "runs a program transferred via XMODEM"},
+    {"sd", cli_sd, "inits the sd card"},
+    {"spi", cli_spi, "sends a byte through SPI and prints the return."},
     {"xmodem", cli_xmodem, "starts XMODEM data transfer program"},
     {NULL, NULL, NULL},
 };
@@ -55,6 +57,39 @@ void cli_xmodem(uint8_t argc, const char *buf, const uint16_t *argv_index)
 void cli_xmodem_run(uint8_t argc, const char *buf, const uint16_t *argv_index)
 {
     xmodem_run();
+}
+
+void cli_sd(uint8_t argc, const char *buf, const uint16_t *argv_index)
+{
+    if (!sd_card_init())
+    {
+        printf("Failed to init the SD card.\n");
+        return;
+    }
+
+    printf("SD card initialized successfully!\n");
+}
+
+void cli_spi(uint8_t argc, const char *buf, const uint16_t *argv_index)
+{
+    if (argc <= 1 || argc > 2) {
+        printf("Error: Invalid arguments.\n");
+        return;
+    }
+
+    char command[5];
+    char value;
+
+    int result = sscanf(buf, "%s %hhx", command, &value);
+    if (result != 2) {
+        printf("Error: Invalid arguments.\n");
+        return;
+    }
+
+    printf("SPI sending value: %02X\n", value);
+
+    char returnedData = spi_send_data(value);
+    printf("SPI return value: %02X\n", returnedData);
 }
 
 int cli_utils_print(const char *fmt, ...)

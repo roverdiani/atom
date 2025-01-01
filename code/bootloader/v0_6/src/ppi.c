@@ -29,6 +29,16 @@ void ppi_write_port_b(struct ppi *self, char value)
     PORT_IO(PPI_B_PORT_ADDR) = value;
 }
 
+char ppi_read_port_a(struct ppi *self)
+{
+    return PORT_IO(PPI_A_PORT_ADDR);
+}
+
+char ppi_read_port_b(struct ppi *self)
+{
+    return PORT_IO(PPI_B_PORT_ADDR);
+}
+
 char ppi_read_port_c(struct ppi *self)
 {
     return PORT_IO(PPI_C_PORT_ADDR);

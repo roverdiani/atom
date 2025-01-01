@@ -25,6 +25,8 @@ void cli_help(uint8_t argc, const char *buf, const uint16_t *argv_index);
 void cli_monitor(uint8_t argc, const char *buf, const uint16_t *argv_index);
 void cli_xmodem(uint8_t argc, const char *buf, const uint16_t *argv_index);
 void cli_xmodem_run(uint8_t argc, const char *buf, const uint16_t *argv_index);
+void cli_sd(uint8_t argc, const char *buf, const uint16_t *argv_index);
+void cli_spi(uint8_t argc, const char *buf, const uint16_t *argv_index);
 
 int cli_utils_print(const char *fmt, ...);
 uint8_t cli_interpreter(const char *line, size_t size, uint16_t *command, size_t *command_length);

@@ -19,8 +19,12 @@ struct ppi {
 
 void ppi_init(struct ppi *self, uintptr_t address);
 void ppi_set_control_register(struct ppi *self, char value);
+
 void ppi_write_port_a(struct ppi *self, char value);
 void ppi_write_port_b(struct ppi *self, char value);
+
+char ppi_read_port_a(struct ppi *self);
+char ppi_read_port_b(struct ppi *self);
 char ppi_read_port_c(struct ppi *self);
 
 #endif //INC_68K_SRC_PPI_H

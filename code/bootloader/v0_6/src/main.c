@@ -8,6 +8,7 @@
 #include "xmodem.h"
 #include "cli.h"
 #include "terminal.h"
+#include "spi.h"
 
 struct ppi _ppi;
 struct ftdi _ftdi;
@@ -22,10 +23,11 @@ int main()
 
     // Init the 8255 and the FT245
     ppi_init(&_ppi, PPI_ADDR);
-    // Ports A, B and Upper C are output. Lower C input.
+    // Ports A and Upper C are output. B and Lower C input.
     // Mode 0 for all three.
-    ppi_set_control_register(&_ppi, 0x81);
+    ppi_set_control_register(&_ppi, 0x83);
     ftdi_init(&_ftdi, &_ppi, FTDI_ADDR);
+    spi_init(&_ppi);
 
     terminal_clear();
 
