@@ -11,14 +11,14 @@
 
 extern struct ftdi _ftdi;
 
-uintptr_t currentAddress = XMODEM_PRG_ADDR;
+uintptr_t currentAddress = ADDRESS_XMODEM_PROGRAM_DEST;
 static int packetNumber = 0;
 bool transferOk = false;
 
 void xmodem_main()
 {
     printf("XMODEM v0.1\n");
-    printf("Memory program destination address is 0x%08X.\n", XMODEM_PRG_ADDR);
+    printf("Memory program destination address is 0x%08X.\n", ADDRESS_XMODEM_PROGRAM_DEST);
     printf("Press X to start the transfer or any other key to exit.\n");
 
     char c = getchar();
@@ -66,9 +66,9 @@ void xmodem_run()
     // Disable interrupts
     asm volatile ("move.w   #0x2700, %sr");
 
-    void *ptr = (void *)XMODEM_PRG_ADDR;
+    void *ptr = (void *)ADDRESS_XMODEM_PROGRAM_DEST;
 
-    printf("Jumping to program loaded at 0x%08X.\n", XMODEM_PRG_ADDR);
+    printf("Jumping to program loaded at 0x%08X.\n", ADDRESS_XMODEM_PROGRAM_DEST);
 
     // Jump to the loaded program's memory address
     goto *ptr;
@@ -144,7 +144,7 @@ int xmodem_transfer_read_packet(struct ftdi *ftdi)
     }
 
     // Write the packet data bytes to the memory at the appropriate location
-    memcpy((void *) XMODEM_PRG_ADDR + ((packetNumber - 1) * XMODEM_DATA_SIZE), buf, XMODEM_DATA_SIZE);
+    memcpy((void *) ADDRESS_XMODEM_PROGRAM_DEST + ((packetNumber - 1) * XMODEM_DATA_SIZE), buf, XMODEM_DATA_SIZE);
 
     ftdi_print_char(ftdi, XMODEM_ACK);
 

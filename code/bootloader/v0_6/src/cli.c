@@ -22,7 +22,7 @@ const CLI_Func_t cli_functions[] = {
     {"help", cli_help, "prints this help message"},
     {"monitor", cli_monitor, "starts the monitor program"},
     {"run", cli_xmodem_run, "runs a program transferred via XMODEM"},
-    {"sd", cli_sd, "inits the sd card"},
+    {"sd", cli_sd, "sd card debug"},
     {"spi", cli_spi, "sends a byte through SPI and prints the return."},
     {"xmodem", cli_xmodem, "starts XMODEM data transfer program"},
     {NULL, NULL, NULL},
@@ -60,13 +60,10 @@ void cli_xmodem_run(uint8_t argc, const char *buf, const uint16_t *argv_index)
 
 void cli_sd(uint8_t argc, const char *buf, const uint16_t *argv_index)
 {
-    if (!sd_card_init())
-    {
-        printf("Failed to init the SD card.\n");
-        return;
-    }
+    printf("Getting SD card info...\n");
 
-    printf("SD card initialized successfully!\n");
+    if (!sd_card_info())
+        printf("Failed to get the SD card info.\n");
 }
 
 void cli_spi(uint8_t argc, const char *buf, const uint16_t *argv_index)

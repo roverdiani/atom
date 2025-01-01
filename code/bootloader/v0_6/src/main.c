@@ -9,6 +9,7 @@
 #include "cli.h"
 #include "terminal.h"
 #include "spi.h"
+#include "sd.h"
 
 struct ppi _ppi;
 struct ftdi _ftdi;
@@ -19,14 +20,14 @@ int main()
     asm volatile ("move.w   #0x2700, %sr");
 
     // Copy interrupt table to proper location
-    memcpy((void*)INT_TABLE_ADDR, intTable, sizeof(intTable));
+    memcpy((void*)ADDRESS_INTERRUPT_TABLE, intTable, sizeof(intTable));
 
     // Init the 8255 and the FT245
-    ppi_init(&_ppi, PPI_ADDR);
+    ppi_init(&_ppi, ADDRESS_IO_BOARD_PPI);
     // Ports A and Upper C are output. B and Lower C input.
     // Mode 0 for all three.
     ppi_set_control_register(&_ppi, 0x83);
-    ftdi_init(&_ftdi, &_ppi, FTDI_ADDR);
+    ftdi_init(&_ftdi, &_ppi, ADDRESS_IO_BOARD_FTDI);
     spi_init(&_ppi);
 
     terminal_clear();
@@ -37,6 +38,12 @@ int main()
 
     printf("ATOM68k\n");
     printf("BIOS v0.6 (12/2024)\n\n");
+    
+    printf("Initializing the SD card... ");
+    if (!sd_card_init())
+        printf("failed!.\n");
+    else
+        printf("ok.\n");
 
     while (true)
     {

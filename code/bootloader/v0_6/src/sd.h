@@ -37,18 +37,18 @@ enum SD_CARD_TIMEOUTS {
 };
 
 typedef struct CID {
-    uint8_t mid;
-    char oid[2];
-    char pnm[5];
-    unsigned prv_m : 4;
-    unsigned prv_n : 4;
-    uint32_t psn;
-    unsigned mdt_year_high : 4;
+    uint8_t manufacturer_id;
+    char oem_application_id[2];
+    char product_name[5];
+    unsigned product_revision_n : 4;
+    unsigned product_revision_m: 4;
+    uint32_t product_serial_number;
     unsigned reserved : 4;
-    unsigned mdt_month : 4;
-    unsigned mdt_year_low : 4;
-    unsigned always1 : 1;
-    unsigned crc : 7;
+    unsigned manufacturing_date_year_high : 4;
+    unsigned manufacturing_date_year_low : 4;
+    unsigned manufacturing_date_month : 4;
+    unsigned crc_cheksum : 7;
+    unsigned not_used : 1;
 } sd_cid_t;
 
 typedef struct CSDV1 {
@@ -173,6 +173,7 @@ union sd_csd_t {
 };
 
 bool sd_card_init();
+bool sd_card_info();
 
 uint8_t sd_card_command(uint8_t command, uint32_t arg);
 uint8_t sd_card_a_command(uint8_t command, uint32_t arg);

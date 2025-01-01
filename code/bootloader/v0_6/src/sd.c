@@ -25,7 +25,6 @@ bool sd_card_init()
             printf("Fail: 1\n");
             return false;
         }
-        printf("Status: %02X\n", status_);
     }
 
     if ((sd_card_command(SD_CMD8, 0x1AA) & SD_STATE_ILLEGAL_COMMAND))
@@ -77,23 +76,36 @@ bool sd_card_init()
 
     spi_set_cs_pin(true);
 
-    printf("Card type: ");
+    return true;
+}
+
+bool sd_card_info()
+{
+    sd_cid_t cid;
+    if (!sd_read_cid(&cid))
+        return false;
+    
+    printf("SD Card Info:\n");
+
+    printf("SD Card Type: ");
     if (type_ == SD_TYPE_SD1)
         printf("SD1\n");
     else if (type_ == SD_TYPE_SD2)
         printf("SD2\n");
     else
         printf("SDHC\n");
-    
-    sd_cid_t cid;
-    sd_read_cid(&cid);
-    printf("SD Card Info:\n");
-    printf("MID: %02X\n", cid.mid);
-    printf("OID: %02X%02X\n", cid.oid[0], cid.oid[1]);
+
+    printf("MID: %02X\n", cid.manufacturer_id);
+    printf("OID: %02X%02X\n", cid.oem_application_id[0], cid.oem_application_id[1]);
+
     printf("Product Name: ");
     for (int i = 0; i < 5; i++)
-        printf("%c", cid.pnm[i]);
+        printf("%c", cid.product_name[i]);
     printf("\n");
+
+    printf("Product revision: %u.%u\n", cid.product_revision_n, cid.product_revision_m);
+    printf("Serial number: %u\n", cid.product_serial_number);
+    printf("Manufacturing Date: %u/%u\n", cid.manufacturing_date_month, (((cid.manufacturing_date_year_high << 4) | cid.manufacturing_date_year_low)) + 2000);
 
     return true;
 }
